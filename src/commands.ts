@@ -1,14 +1,14 @@
 import { getWebQuotes } from "./lib/queries.js";
 
-type HandleRunCommand = {
-  emailType: "abandoned" | "completed" | "scheduled-callback";
-  olderThan: string;
-};
+type HandleRunCommand = (
+  emailType: "abandoned" | "completed" | "scheduled-callback",
+  options: { olderThan: string },
+) => Promise<void>;
 
-export const handleRunCommand = async ({
+export const handleRunCommand: HandleRunCommand = async (
   emailType,
-  olderThan,
-}: HandleRunCommand) => {
+  { olderThan },
+) => {
   const olderThanNumber = Number(olderThan);
   console.log(
     `Running web-quote-emailer for quotes older than ${olderThanNumber} minutes and email type ${emailType}...`,
