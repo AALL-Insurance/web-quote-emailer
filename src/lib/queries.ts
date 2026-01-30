@@ -1,23 +1,35 @@
 import dayjs from "dayjs";
 import { db } from "./database.js";
 
-export const getAgentEmails = async () =>
+export const getWebQuotes = async (olderThan: number = 30) =>
   await db
     .selectFrom("AutoInsured")
-    .innerJoin("AutoDriver", "InsuredUID", "AutoDriver.InsuredUID")
-    .innerJoin("AutoVehicle", "InsuredUID", "AutoVehicle.InsuredUID")
-    .innerJoin("AutoViolation", "InsuredUID", "AutoViolation.InsuredUID")
-    .innerJoin("AutoWebQuote", "InsuredUID", "AutoWebQuote.InsuredUID")
+    .innerJoin("AutoDriver", "AutoInsured.InsuredUID", "AutoDriver.InsuredUID")
+    .innerJoin(
+      "AutoVehicle",
+      "AutoInsured.InsuredUID",
+      "AutoVehicle.InsuredUID",
+    )
+    .innerJoin(
+      "AutoViolation",
+      "AutoInsured.InsuredUID",
+      "AutoViolation.InsuredUID",
+    )
+    .innerJoin(
+      "AutoWebQuote",
+      "AutoInsured.InsuredUID",
+      "AutoWebQuote.InsuredUID",
+    )
     .innerJoin(
       "AutoInsuredPriorPolicy",
-      "InsuredUID",
+      "AutoInsured.InsuredUID",
       "AutoInsuredPriorPolicy.InsuredUID",
     )
     .selectAll()
     .where(
       "AutoInsured.LastSavedDate",
       "<",
-      dayjs().subtract(30, "minute").toDate(),
+      dayjs().subtract(olderThan, "minute").toDate(),
     )
     .where("AutoInsured.LeadSource", "=", "Web Quotes")
     .where("AutoInsured.LeadSource", "is not", null)
