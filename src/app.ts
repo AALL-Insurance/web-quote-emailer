@@ -11,7 +11,10 @@ program
 program
   .command("run")
   .description("execute the web quote emailer process")
-  .arguments("<type>")
+  .argument(
+    "<type>",
+    "type of email to send: abandoned, completed, scheduled-callback",
+  )
   .option(
     "--older-than [minutes]",
     "get web quotes older than specified minutes - 30 is the default",

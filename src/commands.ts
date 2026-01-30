@@ -1,14 +1,14 @@
 import { getWebQuotes } from "./lib/queries.js";
 
 type HandleRunCommand = {
-  emailType: string;
+  emailType: "abandoned" | "completed" | "scheduled-callback";
   olderThan: string;
 };
 
-export const handleRunCommand = async (
-  emailType: string,
-  { olderThan }: HandleRunCommand,
-) => {
+export const handleRunCommand = async ({
+  emailType,
+  olderThan,
+}: HandleRunCommand) => {
   const olderThanNumber = Number(olderThan);
   console.log(
     `Running web-quote-emailer for quotes older than ${olderThanNumber} minutes and email type ${emailType}...`,
@@ -59,6 +59,8 @@ export const handleRunCommand = async (
       `Updating AutoWebQuotes for InsuredUID: ${webQuote.InsuredUID}`,
     );
   }
+  console.log("Process completed.");
+  process.exit(0);
 };
 
 /*
