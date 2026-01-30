@@ -2,7 +2,7 @@
   "name": "web-quote-emailer",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "scaffold": "kysely-codegen --out-file ./src/lib/types/database.d.ts",
     "format": "biome format --write ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
