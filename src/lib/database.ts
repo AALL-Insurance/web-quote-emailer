@@ -1,8 +1,8 @@
-import type { Database } from "./types/database.d.ts"; // this is the Database interface we defined earlier
-import * as tedious from "tedious";
-import * as tarn from "tarn";
 import { Kysely, MssqlDialect } from "kysely";
+import * as tarn from "tarn";
+import * as tedious from "tedious";
 import { env } from "./env.ts";
+import type { DB } from "./types/database.d.ts"; // this is the Database interface we defined earlier
 
 const dialect = new MssqlDialect({
   tarn: {
@@ -37,6 +37,6 @@ const dialect = new MssqlDialect({
 // knows your database structure.
 // Dialect is passed to Kysely's constructor, and from now on, Kysely knows how
 // to communicate with your database.
-export const db = new Kysely<Database>({
+export const db = new Kysely<DB>({
   dialect,
 });
