@@ -1,13 +1,17 @@
 import { getWebQuotes } from "./lib/queries.js";
 
 type HandleRunCommand = {
+  emailType: string;
   olderThan: string;
 };
 
-export const handleRunCommand = async ({ olderThan }: HandleRunCommand) => {
+export const handleRunCommand = async (
+  emailType: string,
+  { olderThan }: HandleRunCommand,
+) => {
   const olderThanNumber = Number(olderThan);
   console.log(
-    `Running web-quote-emailer for quotes older than ${olderThanNumber} minutes...`,
+    `Running web-quote-emailer for quotes older than ${olderThanNumber} minutes and email type ${emailType}...`,
   );
 
   // get web quotes
