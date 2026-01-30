@@ -20,6 +20,9 @@ importers:
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       kysely:
         specifier: ^0.28.10
         version: 0.28.10
