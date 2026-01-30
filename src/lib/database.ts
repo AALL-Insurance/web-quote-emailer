@@ -1,8 +1,8 @@
 import { Kysely, MssqlDialect } from "kysely";
 import * as tarn from "tarn";
 import * as tedious from "tedious";
-import { env } from "./env.ts";
-import type { DB } from "./types/database.d.ts"; // this is the Database interface we defined earlier
+import { env } from "./env.js";
+import type { DB } from "./types/database.js"; // this is the Database interface we defined earlier
 
 const dialect = new MssqlDialect({
   tarn: {

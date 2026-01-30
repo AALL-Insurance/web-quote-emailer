@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { db } from "./database";
+import { db } from "./database.js";
 
 export const getAgentEmails = async () =>
   await db
