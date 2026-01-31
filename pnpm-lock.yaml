@@ -51,6 +51,9 @@ importers:
       '@react-email/preview-server':
         specifier: 5.2.5
         version: 5.2.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@types/nodemailer':
+        specifier: ^7.0.9
+        version: 7.0.9
       kysely-codegen:
         specifier: ^0.19.0
         version: 0.19.0(@tediousjs/connection-string@0.5.0)(kysely@0.28.10)(tarn@3.0.2)(tedious@19.2.0)(typescript@5.9.3)
@@ -934,6 +937,9 @@ packages:
 
   '@types/node@25.1.0':
     resolution: {integrity: sha512-t7frlewr6+cbx+9Ohpl0NOTKXZNV9xHRmNOvql47BFJKcEG1CxtxlPEEe+gR9uhVWM4DwhnvTF110mIL4yP9RA==}
+
+  '@types/nodemailer@7.0.9':
+    resolution: {integrity: sha512-vI8oF1M+8JvQhsId0Pc38BdUP2evenIIys7c7p+9OZXSPOH5c1dyINP1jT8xQ2xPuBUXmIC87s+91IZMDjH8Ow==}
 
   '@types/readable-stream@4.0.23':
     resolution: {integrity: sha512-wwXrtQvbMHxCbBgjHaMGEmImFTQxxpfMOR/ZoQnXxB1woqkUbdLGFDgauo00Py9IudiaqSeiBiulSV9i6XIPig==}
@@ -2679,6 +2685,10 @@ snapshots:
   '@types/node@25.1.0':
     dependencies:
       undici-types: 7.16.0
+
+  '@types/nodemailer@7.0.9':
+    dependencies:
+      '@types/node': 25.1.0
 
   '@types/readable-stream@4.0.23':
     dependencies:
