@@ -1,4 +1,13 @@
-import { getWebQuotes } from "./lib/queries.js";
+import {
+  sendAgentUserAbandonedEmail,
+  sendAgentUserCompletedEmail,
+  sendAgentUserScheduledCallbackEmail,
+} from "./lib/emails/agent-emails.js";
+import {
+  getAutoWebQuoteRates,
+  getWebQuotes,
+  type WebQuote,
+} from "./lib/queries.js";
 
 type HandleRunCommand = (
   emailType: "abandoned" | "completed" | "scheduled-callback",
@@ -22,8 +31,51 @@ export const handleRunCommand: HandleRunCommand = async (
     console.log("No web quotes found. Exiting...");
     process.exit(0);
   }
+
+  let quotes: Array<WebQuote> = [];
+  if (emailType === "completed") {
+    quotes = webQuotes.filter((quote) => {
+      if (!quote.AutoWebQuote) {
+        return false;
+      }
+
+      return (
+        quote.AutoWebQuote.WebProgress === "display-quote" &&
+        quote.AutoWebQuote.wasUserQuoteFinishedEmailSent === true &&
+        quote.AutoWebQuote.ScheduledCallbackDateTime == null
+      );
+    });
+  }
+
+  if (emailType === "abandoned") {
+    quotes = webQuotes.filter((quote) => {
+      if (!quote.AutoWebQuote) {
+        return false;
+      }
+      return (
+        quote.AutoWebQuote.WebProgress !== "display-quote" ||
+        quote.AutoWebQuote.wasUserQuoteFinishedEmailSent === false
+      );
+    });
+  }
+
+  if (emailType === "scheduled-callback") {
+    quotes = webQuotes.filter((quote) => {
+      if (!quote.AutoWebQuote) {
+        return false;
+      }
+      return (
+        quote.AutoWebQuote.WebProgress === "display-quote" &&
+        quote.AutoWebQuote.wasUserQuoteFinishedEmailSent === true &&
+        quote.AutoWebQuote.ScheduledCallbackDateTime != null
+      );
+    });
+  }
+
   // loop through web quotes
-  for (const webQuote of webQuotes) {
+  for (const webQuote of quotes) {
+    const autoWebQuoteRates = await getAutoWebQuoteRates(webQuote.InsuredUID);
+
     console.log(`Processing quote with InsuredUID: ${webQuote.InsuredUID}`);
 
     // check if firstname, lastname, emailaddress, phonenumber are not null or empty
@@ -39,30 +91,71 @@ export const handleRunCommand: HandleRunCommand = async (
       continue;
     }
 
-    // if webprogress is display-quote and wasuserquotefinishedeamilsent is true send quote completed email
+    // skip test quotes
     if (
-      webQuote.WebProgress === "display-quote" &&
-      webQuote.wasUserQuoteFinishedEmailSent === true
+      webQuote.InsuredFirstName === "test" &&
+      webQuote.InsuredLastName === "test" &&
+      webQuote.EmailAddress.toLowerCase().includes("@aall.net")
     ) {
+      console.log(
+        `Skipping test quote with InsuredUID: ${webQuote.InsuredUID}.`,
+      );
+      continue;
+    }
+
+    // check if autowebquote is valid
+    if (!webQuote.AutoWebQuote) {
+      console.log(
+        `Skipping quote with InsuredUID: ${webQuote.InsuredUID} due to missing AutoWebQuote data.`,
+      );
+      continue;
+    }
+
+    // send quote completed email
+    if (emailType === "completed") {
       console.log(
         `Sending quote completed email for InsuredUID: ${webQuote.InsuredUID}`,
       );
-    } else {
-      // else send quote abandoned email
+      await sendAgentUserCompletedEmail(webQuote, autoWebQuoteRates);
+    }
+
+    // send quote abandoned email
+    if (emailType === "abandoned") {
       console.log(
         `Sending quote abandoned email for InsuredUID: ${webQuote.InsuredUID}`,
       );
+      await sendAgentUserAbandonedEmail(webQuote, autoWebQuoteRates);
     }
 
-    // update autowebquotes table to set wasagentquotefinishedeamilsent or wasagentquoteabandonedeamilsent to true
+    // send scheduled callback email
+    if (emailType === "scheduled-callback") {
+      console.log(
+        `Sending scheduled callback email for InsuredUID: ${webQuote.InsuredUID}`,
+      );
+
+      if (!webQuote.AutoWebQuote.ScheduledCallbackDateTime) {
+        console.log(
+          `Skipping quote with InsuredUID: ${webQuote.InsuredUID} due to missing ScheduledCallbackDateTime.`,
+        );
+        continue;
+      }
+
+      await sendAgentUserScheduledCallbackEmail(
+        webQuote,
+        autoWebQuoteRates,
+        webQuote.AutoWebQuote.ScheduledCallbackDateTime,
+      );
+    }
+
+    // update autowebquotes table
     console.log(
       `Updating AutoWebQuotes for InsuredUID: ${webQuote.InsuredUID}`,
     );
   }
+
   console.log("Process completed.");
   process.exit(0);
 };
-
 /*
 
 GmailMessageBuilder gmailMessageBuilder = new("noreply@aall.net");

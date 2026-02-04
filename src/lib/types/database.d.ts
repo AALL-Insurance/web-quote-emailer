@@ -259,6 +259,7 @@ export interface AutoWebQuote {
   InsuredUID: string;
   IsCurrentOrPreviousCustomer: boolean | null;
   ResumeQuoteSection: string | null;
+  ScheduledCallbackDateTime: Date | null;
   UninsuredReason: string | null;
   wasAgentQuoteAbandonedEmailSent: boolean | null;
   wasAgentQuoteFinishedEmailSent: boolean | null;
@@ -268,6 +269,20 @@ export interface AutoWebQuote {
   WebLeadSource: string | null;
   WebLeadSourceDescription: string | null;
   WebProgress: string | null;
+}
+
+export interface AutoWebQuoteRates {
+  CarrierCode: string | null;
+  CarrierName: string | null;
+  Deposit: number | null;
+  Installment: number | null;
+  InsuredUID: string | null;
+  IsPreferred: boolean | null;
+  IsRecommended: boolean | null;
+  IsSelected: boolean | null;
+  RateUID: string;
+  StringResponse: string | null;
+  Total: number | null;
 }
 
 export interface CarrierFieldMap {
@@ -647,6 +662,14 @@ export interface RateResults {
   StringResponse: string | null;
 }
 
+export interface ShoppingReason {
+  DisplayOrder: number | null;
+  DisplayText: string | null;
+  QuoteType: string | null;
+  ShoppingReasonID: Generated<number>;
+  ValueText: string | null;
+}
+
 export interface StateAbbreviation {
   Abbreviation: string;
   FullName: string | null;
@@ -693,9 +716,33 @@ export interface VINData {
   Year: number | null;
 }
 
+export interface VINTestQuote {
+  CarrierCode: string | null;
+  ISOVehicleID: number | null;
+  QuotedDate: Date | null;
+  StringResult: string | null;
+  VIN: string | null;
+  VINTestQuoteID: Generated<number>;
+}
+
 export interface ViolationOption {
   IsActive: Generated<boolean>;
   ViolationDescription: string;
+}
+
+export interface WebQuotesAverageTimeToQuote {
+  "Average Elapsed Time": string | null;
+}
+
+export interface WebQuotesTimeToQuote {
+  Age: number | null;
+  CompletedDate: string | null;
+  CreatedDate: string | null;
+  ElapsedTime: string | null;
+  InsuredEmailAddress: string | null;
+  InsuredFirstName: string | null;
+  InsuredLastName: string | null;
+  QuoteNumber: number | null;
 }
 
 export interface DB {
@@ -711,6 +758,7 @@ export interface DB {
   AutoVehicle: AutoVehicle;
   AutoViolation: AutoViolation;
   AutoWebQuote: AutoWebQuote;
+  AutoWebQuoteRates: AutoWebQuoteRates;
   CarrierFieldMap: CarrierFieldMap;
   CarrierNameOption: CarrierNameOption;
   CarrierQuestion: CarrierQuestion;
@@ -736,10 +784,14 @@ export interface DB {
   PrefillPolicy: PrefillPolicy;
   PrefillVehicle: PrefillVehicle;
   RateResults: RateResults;
+  ShoppingReason: ShoppingReason;
   StateAbbreviation: StateAbbreviation;
   sysdiagrams: Sysdiagrams;
   UserInfo: UserInfo;
   VeriskToken: VeriskToken;
   VINData: VINData;
+  VINTestQuote: VINTestQuote;
   ViolationOption: ViolationOption;
+  WebQuotesAverageTimeToQuote: WebQuotesAverageTimeToQuote;
+  WebQuotesTimeToQuote: WebQuotesTimeToQuote;
 }
