@@ -1,4 +1,4 @@
-import { Kysely, MssqlDialect } from "kysely";
+import { Kysely, MssqlDialect, ParseJSONResultsPlugin } from "kysely";
 import * as tarn from "tarn";
 import * as tedious from "tedious";
 import { env } from "./env.js";
@@ -39,4 +39,5 @@ const dialect = new MssqlDialect({
 // to communicate with your database.
 export const db = new Kysely<DB>({
   dialect,
+  plugins: [new ParseJSONResultsPlugin()],
 });
