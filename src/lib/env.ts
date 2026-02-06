@@ -8,6 +8,8 @@ const envSchema = z.object({
   DATABASE_SERVER: z.string().min(1),
   DATABASE_NAME: z.string().min(1),
   DATABASE_URL: z.string().min(1),
+  GMAIL_USER: z.string().min(1),
+  GMAIL_APP_PASSWORD: z.string().min(1),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -19,5 +21,4 @@ if (!parsedEnv.success) {
   );
   throw new Error("Invalid environment variables");
 }
-
 export const env = parsedEnv.data;
