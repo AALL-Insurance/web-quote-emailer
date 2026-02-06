@@ -9,7 +9,7 @@
     "format": "biome format --write ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
     "lint": "biome lint --write ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
     "check": "biome check ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
-    "build": "tsc --outDir ./dist --project tsconfig.json",
+    "build": "tsc --outDir ./dist --project tsconfig.json && pkg ./dist/app.js --out-path ./dist/web-quote-emailer.exe --targets node24-win-x64",
     "dev": "tsx ./src/app.ts run",
     "start": "node ./dist/app.js run",
     "email:dev": "email dev"
