@@ -1,3 +1,6 @@
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone.js"; // ES 2015
+import utc from "dayjs/plugin/utc.js"; // ES 2015
 import {
   sendAgentUserAbandonedEmail,
   sendAgentUserCompletedEmail,
@@ -8,6 +11,9 @@ import {
   getWebQuotes,
   type WebQuote,
 } from "./lib/queries.js";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type HandleRunCommand = (
   emailType: "abandoned" | "completed" | "scheduled-callback",
@@ -26,7 +32,6 @@ export const handleRunCommand: HandleRunCommand = async (
   // get web quotes
   const webQuotes = await getWebQuotes(olderThanNumber);
   console.log(`Found ${webQuotes.length} web quotes.`);
-
   if (!webQuotes || webQuotes.length === 0) {
     console.log("No web quotes found. Exiting...");
     process.exit(0);
@@ -53,7 +58,7 @@ export const handleRunCommand: HandleRunCommand = async (
         return false;
       }
       return (
-        quote.AutoWebQuote.WebProgress !== "display-quote" ||
+        quote.AutoWebQuote.WebProgress !== "display-quote" &&
         quote.AutoWebQuote.wasUserQuoteFinishedEmailSent === false
       );
     });
@@ -71,7 +76,9 @@ export const handleRunCommand: HandleRunCommand = async (
       );
     });
   }
-
+  console.log(
+    `Filtered down to ${quotes.length} web quotes to process for email type ${emailType}.`,
+  );
   // loop through web quotes
   for (const webQuote of quotes) {
     const autoWebQuoteRates = await getAutoWebQuoteRates(webQuote.InsuredUID);
@@ -93,12 +100,14 @@ export const handleRunCommand: HandleRunCommand = async (
 
     // skip test quotes
     if (
-      webQuote.InsuredFirstName === "test" &&
-      webQuote.InsuredLastName === "test" &&
-      webQuote.EmailAddress.toLowerCase().includes("@aall.net")
+      !(
+        webQuote.InsuredFirstName === "test" &&
+        webQuote.InsuredLastName === "test" &&
+        webQuote.EmailAddress.toLowerCase().includes("@aall.net")
+      )
     ) {
       console.log(
-        `Skipping test quote with InsuredUID: ${webQuote.InsuredUID}.`,
+        `Skipping test quote with InsuredUID: ${webQuote.InsuredUID}. ${webQuote.InsuredFirstName} ${webQuote.InsuredLastName} - ${webQuote.EmailAddress}`,
       );
       continue;
     }

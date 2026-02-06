@@ -33,14 +33,15 @@ export const sendAgentUserScheduledCallbackEmail = async (
       callbackDateTime,
     );
 
-    if (
-      (webQuote.InsuredFirstName === "test" ||
-        webQuote.InsuredLastName === "test") &&
-      to.includes("@aall.net")
-    ) {
-      return;
-    }
+    // if (
+    //   (webQuote.InsuredFirstName === "test" ||
+    //     webQuote.InsuredLastName === "test") &&
+    //   to.includes("@aall.net")
+    // ) {
+    //   return;
+    // }
 
+    console.log("Sending email to:", to);
     await transporter.sendMail({
       from: `"Web Quotes" <${process.env.GMAIL_USER}>`,
       to: to,
@@ -69,14 +70,15 @@ export const sendAgentUserCompletedEmail = async (
       autoWebQuoteRate,
     );
 
-    if (
-      (webQuote.InsuredFirstName === "test" ||
-        webQuote.InsuredLastName === "test") &&
-      to.includes("@aall.net")
-    ) {
-      return;
-    }
+    // if (
+    //   (webQuote.InsuredFirstName === "test" ||
+    //     webQuote.InsuredLastName === "test") &&
+    //   to.includes("@aall.net")
+    // ) {
+    //   return;
+    // }
 
+    console.log("Sending email to:", to);
     await transporter.sendMail({
       from: `"Web Quotes" <${process.env.GMAIL_USER}>`,
       to: to,
@@ -105,14 +107,15 @@ export const sendAgentUserAbandonedEmail = async (
       autoWebQuoteRate,
     );
 
-    if (
-      (webQuote.InsuredFirstName === "test" ||
-        webQuote.InsuredLastName === "test") &&
-      to.includes("@aall.net")
-    ) {
-      return;
-    }
+    // if (
+    //   (webQuote.InsuredFirstName === "test" ||
+    //     webQuote.InsuredLastName === "test") &&
+    //   to.includes("@aall.net")
+    // ) {
+    //   return;
+    // }
 
+    console.log("Sending email to:", to);
     await transporter.sendMail({
       from: `"Web Quotes" <${process.env.GMAIL_USER}>`,
       to: to,
