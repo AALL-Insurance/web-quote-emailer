@@ -2,8 +2,13 @@ import dayjs from "dayjs";
 import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/mssql";
 import { db } from "./database.js";
 
-export const getWebQuotes = async (olderThan: number = 30) =>
-  await db
+export const getWebQuotes = async (olderThan: number = 30) => {
+  const TIMEZONE_OFFSET = 7; // America/Phoenix is UTC-7
+  const dateTimeLimit = dayjs()
+    .subtract(TIMEZONE_OFFSET, "hour")
+    .subtract(olderThan, "minute")
+    .toDate();
+  const results = await db
     .selectFrom("AutoInsured")
     .innerJoin("AutoDriver", "AutoInsured.InsuredUID", "AutoDriver.InsuredUID")
     .innerJoin(
@@ -12,31 +17,25 @@ export const getWebQuotes = async (olderThan: number = 30) =>
       "AutoVehicle.InsuredUID",
     )
     .innerJoin(
-      "AutoViolation",
-      "AutoInsured.InsuredUID",
-      "AutoViolation.InsuredUID",
-    )
-    .innerJoin(
       "AutoWebQuote",
       "AutoInsured.InsuredUID",
       "AutoWebQuote.InsuredUID",
     )
-    .innerJoin(
+    .leftJoin(
+      "AutoViolation",
+      "AutoInsured.InsuredUID",
+      "AutoViolation.InsuredUID",
+    )
+    .leftJoin(
       "AutoInsuredPriorPolicy",
       "AutoInsured.InsuredUID",
       "AutoInsuredPriorPolicy.InsuredUID",
     )
-
-    .where("AutoInsured.LeadSource", "=", "Web Quotes")
-    .where("AutoInsured.LeadSource", "is not", null)
+    .where("AutoInsured.LastSavedDate", "<", dateTimeLimit)
+    .where("AutoInsured.LeadSource", "like", "Web Quotes")
     .where("AutoWebQuote.wasAgentScheduledCallbackEmailSent", "is", null)
     .where("AutoWebQuote.wasAgentQuoteFinishedEmailSent", "is", null)
     .where("AutoWebQuote.wasAgentQuoteAbandonedEmailSent", "is", null)
-    .where(
-      "AutoInsured.LastSavedDate",
-      "<",
-      dayjs().subtract(olderThan, "minute").toDate(),
-    )
     .orderBy("AutoInsured.QuoteNumber", "desc")
     .selectAll("AutoInsured")
     .select((eb) => [
@@ -168,16 +167,33 @@ export const getWebQuotes = async (olderThan: number = 30) =>
       ).as("AutoViolation"),
     ])
     .execute();
+  return results;
+};
 
 export type WebQuote = Awaited<ReturnType<typeof getWebQuotes>>[number];
 
-export const getAutoWebQuoteRates = async (InsuredUID: string) =>
-  await db
+export const getAutoWebQuoteRates = async (InsuredUID: string) => {
+  const result = await db
     .selectFrom("AutoWebQuoteRates")
     .where("AutoWebQuoteRates.InsuredUID", "=", InsuredUID)
     .orderBy("AutoWebQuoteRates.Installment", "asc")
     .selectAll("AutoWebQuoteRates")
     .execute();
+
+  const recommendedRate = result.find((rate) => rate.IsRecommended);
+  const preferredRate = result.find((rate) => rate.IsPreferred);
+  const autoWebQuoteRates = result.filter(
+    (rate) => !rate.IsRecommended && !rate.IsPreferred,
+  );
+  if (recommendedRate) {
+    autoWebQuoteRates.unshift(recommendedRate);
+  }
+  if (preferredRate) {
+    autoWebQuoteRates.unshift(preferredRate);
+  }
+
+  return autoWebQuoteRates;
+};
 
 export type AutoWebQuoteRates = Awaited<
   ReturnType<typeof getAutoWebQuoteRates>
