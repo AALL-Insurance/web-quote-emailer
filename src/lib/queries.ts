@@ -33,6 +33,8 @@ export const getWebQuotes = async (olderThan: number = 30) => {
     )
     .where("AutoInsured.LastSavedDate", "<", dateTimeLimit)
     .where("AutoInsured.LeadSource", "like", "Web Quotes")
+    .where("AutoInsured.EmailAddress", "is not", null)
+    .where("AutoInsured.PhoneNumber", "is not", null)
     .where("AutoWebQuote.wasAgentScheduledCallbackEmailSent", "is", null)
     .where("AutoWebQuote.wasAgentQuoteFinishedEmailSent", "is", null)
     .where("AutoWebQuote.wasAgentQuoteAbandonedEmailSent", "is", null)
