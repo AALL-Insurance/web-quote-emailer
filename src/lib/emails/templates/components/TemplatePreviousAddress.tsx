@@ -14,16 +14,28 @@ export const TemplatePreviousAddress = ({
     return null;
   }
 
+  const previousAddress = `${webQuote.PreviousAddress1 || ""}
+   ${webQuote.PreviousCity || ""}, ${webQuote.PreviousState || ""} ${webQuote.PreviousZipCode || ""}`.trim();
+
+  if (
+    !webQuote.PreviousAddress1 &&
+    !webQuote.PreviousCity &&
+    !webQuote.PreviousState &&
+    !webQuote.PreviousZipCode
+  ) {
+    return null;
+  }
+
+  if (!previousAddress) {
+    return null;
+  }
+
   return (
     <Section>
       <Heading as="h2">Previous Address</Heading>
       <table style={tableStyle}>
         <tbody>
-          <TemplateRow
-            label="Previous Address"
-            value={`${webQuote.PreviousAddress1}
-   ${webQuote.PreviousCity}, ${webQuote.PreviousState} ${webQuote.PreviousZipCode}`}
-          />
+          <TemplateRow label="Previous Address" value={previousAddress} />
         </tbody>
       </table>
     </Section>
