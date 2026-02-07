@@ -198,3 +198,50 @@ export const getAutoWebQuoteRates = async (InsuredUID: string) => {
 export type AutoWebQuoteRates = Awaited<
   ReturnType<typeof getAutoWebQuoteRates>
 >[number];
+
+export const updateAgentUserCompletedEmailSent = async (InsuredUID: string) => {
+  try {
+    await db
+      .updateTable("AutoWebQuote")
+      .set({ wasAgentQuoteFinishedEmailSent: true })
+      .where("InsuredUID", "=", InsuredUID)
+      .execute();
+  } catch (error) {
+    console.error(
+      `Error updating wasAgentQuoteFinishedEmailSent for InsuredUID: ${InsuredUID}`,
+      error,
+    );
+  }
+};
+
+export const updateAgentUserAbandonedEmailSent = async (InsuredUID: string) => {
+  try {
+    await db
+      .updateTable("AutoWebQuote")
+      .set({ wasAgentQuoteAbandonedEmailSent: true })
+      .where("InsuredUID", "=", InsuredUID)
+      .execute();
+  } catch (error) {
+    console.error(
+      `Error updating wasAgentQuoteAbandonedEmailSent for InsuredUID: ${InsuredUID}`,
+      error,
+    );
+  }
+};
+
+export const updateAgentUserScheduledCallbackEmailSent = async (
+  InsuredUID: string,
+) => {
+  try {
+    await db
+      .updateTable("AutoWebQuote")
+      .set({ wasAgentScheduledCallbackEmailSent: true })
+      .where("InsuredUID", "=", InsuredUID)
+      .execute();
+  } catch (error) {
+    console.error(
+      `Error updating wasAgentScheduledCallbackEmailSent for InsuredUID: ${InsuredUID}`,
+      error,
+    );
+  }
+};

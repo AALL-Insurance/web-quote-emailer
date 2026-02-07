@@ -9,6 +9,9 @@ import {
 import {
   getAutoWebQuoteRates,
   getWebQuotes,
+  updateAgentUserAbandonedEmailSent,
+  updateAgentUserCompletedEmailSent,
+  updateAgentUserScheduledCallbackEmailSent,
   type WebQuote,
 } from "./lib/queries.js";
 
@@ -126,6 +129,10 @@ export const handleRunCommand: HandleRunCommand = async (
         `Sending quote completed email for InsuredUID: ${webQuote.InsuredUID}`,
       );
       await sendAgentUserCompletedEmail(webQuote, autoWebQuoteRates);
+      console.log(
+        `Updating completed email sent for InsuredUID: ${webQuote.InsuredUID}`,
+      );
+      await updateAgentUserCompletedEmailSent(webQuote.InsuredUID);
     }
 
     // send quote abandoned email
@@ -134,14 +141,14 @@ export const handleRunCommand: HandleRunCommand = async (
         `Sending quote abandoned email for InsuredUID: ${webQuote.InsuredUID}`,
       );
       await sendAgentUserAbandonedEmail(webQuote, autoWebQuoteRates);
+      console.log(
+        `Updating abandoned email sent for InsuredUID: ${webQuote.InsuredUID}`,
+      );
+      await updateAgentUserAbandonedEmailSent(webQuote.InsuredUID);
     }
 
     // send scheduled callback email
     if (emailType === "scheduled-callback") {
-      console.log(
-        `Sending scheduled callback email for InsuredUID: ${webQuote.InsuredUID}`,
-      );
-
       if (!webQuote.AutoWebQuote.ScheduledCallbackDateTime) {
         console.log(
           `Skipping quote with InsuredUID: ${webQuote.InsuredUID} due to missing ScheduledCallbackDateTime.`,
@@ -149,71 +156,21 @@ export const handleRunCommand: HandleRunCommand = async (
         continue;
       }
 
+      console.log(
+        `Sending scheduled callback email for InsuredUID: ${webQuote.InsuredUID}`,
+      );
       await sendAgentUserScheduledCallbackEmail(
         webQuote,
         autoWebQuoteRates,
         webQuote.AutoWebQuote.ScheduledCallbackDateTime,
       );
+      console.log(
+        `Updating scheduled callback email sent for InsuredUID: ${webQuote.InsuredUID}`,
+      );
+      await updateAgentUserScheduledCallbackEmailSent(webQuote.InsuredUID);
     }
-
-    // update autowebquotes table
-    console.log(
-      `Updating AutoWebQuotes for InsuredUID: ${webQuote.InsuredUID}`,
-    );
   }
 
   console.log("Process completed.");
   process.exit(0);
 };
-/*
-
-GmailMessageBuilder gmailMessageBuilder = new("noreply@aall.net");
-foreach (var record in results)
-{
-    if (record.AutoWebQuote == null)
-    {
-        continue;
-    }
-
-    if (record.InsuredFirstName == null || record.InsuredLastName == null || record.EmailAddress == null || record.PhoneNumber == null)
-    {
-        continue;
-    }
-
-    if (record.AutoWebQuote.WebProgress == "display-quote" && record.AutoWebQuote.WasUserQuoteFinishedEmailSent == true) // SEND QUOTE COMPLETED BUT NO CONTACT REQUEST EMAIL
-    {
-        var email = Emails.WebQuoteEmail("Quote Completed", $"The following customer received an online rate but has not requested contact. Review Quote {record.QuoteNumber}, verify accuracy and missing discounts before contacting the customer.", record);
-        gmailMessageBuilder
-            .SetFrom("Web Quotes")
-            .SetTo(emailRecipients)
-            .SetBcc("ricardo.valdovinos@aall.net")
-            .SetSubject($"WebQuote: Review Completed Quote for {record.InsuredFirstName} {record.InsuredLastName}")
-            .SetBody(email, false);
-        await db.AutoWebQuotes
-            .Where(w => w.InsuredUid == record.InsuredUid)
-            .ExecuteUpdateAsync(s => s
-            .SetProperty(w => w.WasAgentQuoteFinishedEmailSent, true));
-        sent["completed"] += 1;
-    }
-    else // SEND QUOTE ABANDONED EMAIL
-    {
-        var email = Emails.WebQuoteEmail("Quote Abandoned", $"The client started the quote 30 minutes ago and has not completed it, therefore it is assumed they have abandoned the quote process.", record);
-        gmailMessageBuilder
-            .SetFrom("Web Quotes")
-            .SetTo(emailRecipients)
-            .SetBcc("ricardo.valdovinos@aall.net")
-            .SetSubject($"WebQuote: Review Abandoned Quote for {record.InsuredFirstName} {record.InsuredLastName}")
-            .SetBody(email, false);
-        await db.AutoWebQuotes
-            .Where(w => w.InsuredUid == record.InsuredUid)
-            .ExecuteUpdateAsync(s => s
-            .SetProperty(w => w.WasAgentQuoteAbandonedEmailSent, true));
-        sent["abandoned"] += 1;
-    }
-    gmailMessageBuilder.Send();
-    Console.WriteLine($"Sending email for InsuredUid: {record.InsuredUid}");
-    gmailMessageBuilder.Reset();
-}
-
-
-*/
