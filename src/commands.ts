@@ -88,26 +88,18 @@ export const handleRunCommand: HandleRunCommand = async (
 
     console.log(`Processing quote with InsuredUID: ${webQuote.InsuredUID}`);
 
-    // check if firstname, lastname, emailaddress, phonenumber are not null or empty
-    if (
-      webQuote.InsuredFirstName == null ||
-      webQuote.InsuredLastName == null ||
-      webQuote.EmailAddress == null ||
-      webQuote.PhoneNumber == null
-    ) {
+    if (!webQuote.EmailAddress) {
       console.log(
-        `Skipping quote with InsuredUID: ${webQuote.InsuredUID} due to missing contact information.`,
+        `Skipping quote with InsuredUID: ${webQuote.InsuredUID} due to missing EmailAddress.`,
       );
       continue;
     }
 
     // skip test quotes
     if (
-      !(
-        webQuote.InsuredFirstName === "test" &&
-        webQuote.InsuredLastName === "test" &&
-        webQuote.EmailAddress.toLowerCase().includes("@aall.net")
-      )
+      webQuote.InsuredFirstName === "test" &&
+      webQuote.InsuredLastName === "test" &&
+      webQuote.EmailAddress.toLowerCase().includes("@aall.net")
     ) {
       console.log(
         `Skipping test quote with InsuredUID: ${webQuote.InsuredUID}. ${webQuote.InsuredFirstName} ${webQuote.InsuredLastName} - ${webQuote.EmailAddress}`,

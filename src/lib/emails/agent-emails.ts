@@ -14,7 +14,21 @@ import {
   getAgentScheduleCallbackEmailText,
 } from "./agent-schedule-callback.js";
 
-const to = "ricardo.valdovinos@aall.net";
+const getRecipientEmailAddress = (webQuote: WebQuote): string => {
+  if (!webQuote.EmailAddress) {
+    return "ricardo.valdovinos@aall.net";
+  }
+
+  let recipient = "webquote@aall.net";
+  if (
+    (webQuote.InsuredFirstName === "test" ||
+      webQuote.InsuredLastName === "test") &&
+    webQuote.EmailAddress.includes("@aall.net")
+  ) {
+    recipient = "ricardo.valdovinos@aall.net";
+  }
+  return recipient;
+};
 
 export const sendAgentUserScheduledCallbackEmail = async (
   webQuote: WebQuote,
@@ -33,13 +47,7 @@ export const sendAgentUserScheduledCallbackEmail = async (
       callbackDateTime,
     );
 
-    // if (
-    //   (webQuote.InsuredFirstName === "test" ||
-    //     webQuote.InsuredLastName === "test") &&
-    //   to.includes("@aall.net")
-    // ) {
-    //   return;
-    // }
+    const to = getRecipientEmailAddress(webQuote);
 
     console.log("Sending email to:", to);
     await transporter.sendMail({
@@ -70,13 +78,7 @@ export const sendAgentUserCompletedEmail = async (
       autoWebQuoteRate,
     );
 
-    // if (
-    //   (webQuote.InsuredFirstName === "test" ||
-    //     webQuote.InsuredLastName === "test") &&
-    //   to.includes("@aall.net")
-    // ) {
-    //   return;
-    // }
+    const to = getRecipientEmailAddress(webQuote);
 
     console.log("Sending email to:", to);
     await transporter.sendMail({
@@ -107,13 +109,7 @@ export const sendAgentUserAbandonedEmail = async (
       autoWebQuoteRate,
     );
 
-    // if (
-    //   (webQuote.InsuredFirstName === "test" ||
-    //     webQuote.InsuredLastName === "test") &&
-    //   to.includes("@aall.net")
-    // ) {
-    //   return;
-    // }
+    const to = getRecipientEmailAddress(webQuote);
 
     console.log("Sending email to:", to);
     await transporter.sendMail({
