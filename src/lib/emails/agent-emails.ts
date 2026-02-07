@@ -52,7 +52,8 @@ export const sendAgentUserScheduledCallbackEmail = async (
     console.log("Sending email to:", to);
     await transporter.sendMail({
       from: `"Web Quotes" <${process.env.GMAIL_USER}>`,
-      to: to,
+      to,
+      bcc: "ricardo.valdovinos@aall.net",
       replyTo: to,
       subject: `WebQuote: Review Scheduled Callback for ${webQuote.InsuredFirstName} ${webQuote.InsuredLastName}`,
       text,
@@ -83,7 +84,8 @@ export const sendAgentUserCompletedEmail = async (
     console.log("Sending email to:", to);
     await transporter.sendMail({
       from: `"Web Quotes" <${process.env.GMAIL_USER}>`,
-      to: to,
+      to,
+      bcc: "ricardo.valdovinos@aall.net",
       replyTo: to,
       subject: `WebQuote: Review Completed Quote for ${webQuote.InsuredFirstName} ${webQuote.InsuredLastName}`,
       text,
@@ -114,7 +116,8 @@ export const sendAgentUserAbandonedEmail = async (
     console.log("Sending email to:", to);
     await transporter.sendMail({
       from: `"Web Quotes" <${process.env.GMAIL_USER}>`,
-      to: to,
+      to,
+      bcc: "ricardo.valdovinos@aall.net",
       replyTo: to,
       subject: `WebQuote: Review Abandoned Quote for ${webQuote.InsuredFirstName} ${webQuote.InsuredLastName}`,
       text,
