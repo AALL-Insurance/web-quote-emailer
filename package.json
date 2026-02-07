@@ -13,8 +13,8 @@
     "dev": "tsx ./src/app.ts run",
     "start": "node ./dist/app.js run",
     "email:dev": "email dev",
-    "compile": " C:/Users/ricardo.valdovinos/.bun/bin/bun.exe build ./src/app.ts --compile --outfile web-quote-emailer.exe",
-    "deploy": "cp ./web-quote-emailer.exe \\\\rdsbroker\\fdrive\\tech\\ScheduledTasks\\web-quote-emailer\\web-quote-emailer.exe"
+    "compile": "C:/Users/ricardo.valdovinos/.bun/bin/bun.exe build ./src/app.ts --compile --outfile web-quote-emailer.exe",
+    "deploy": "pnpm run compile && cp ./web-quote-emailer.exe \\\\rdsbroker\\fdrive\\tech\\ScheduledTasks\\web-quote-emailer\\web-quote-emailer.exe"
   },
   "keywords": [],
   "author": "",
