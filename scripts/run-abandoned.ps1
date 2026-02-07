@@ -1,0 +1,1 @@
+\\rdsbroker\fdrive\tech\ScheduledTasks\web-quote-emailer\web-quote-emailer.exe run abandoned --older-than=30
