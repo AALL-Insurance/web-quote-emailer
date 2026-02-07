@@ -22,6 +22,10 @@ export const TemplateAutoDriver = ({ AutoDriver }: TemplateAutoDriverProps) => {
             <th style={headerCell("#619f42")}>Gender</th>
             <th style={headerCell("#619f42")}>Relationship</th>
             <th style={headerCell("#619f42")}>Marital</th>
+            <th style={headerCell("#619f42")}>License Status</th>
+            <th style={headerCell("#619f42")}>License Type</th>
+            <th style={headerCell("#619f42")}>License State</th>
+            <th style={headerCell("#619f42")}>License Number</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +38,10 @@ export const TemplateAutoDriver = ({ AutoDriver }: TemplateAutoDriverProps) => {
               <td style={valueCell}>{driver.Gender}</td>
               <td style={valueCell}>{driver.Relationship}</td>
               <td style={valueCell}>{driver.MaritalStatus}</td>
+              <td style={valueCell}>{driver.LicenseStatus}</td>
+              <td style={valueCell}>{driver.LicenseType}</td>
+              <td style={valueCell}>{driver.LicenseState}</td>
+              <td style={valueCell}>{driver.LicenseNumber} (placeholder)</td>
             </tr>
           ))}
         </tbody>
