@@ -10,12 +10,8 @@ export const getWebQuotes = async (olderThan: number = 30) => {
     .toDate();
   const results = await db
     .selectFrom("AutoInsured")
-    .innerJoin("AutoDriver", "AutoInsured.InsuredUID", "AutoDriver.InsuredUID")
-    .innerJoin(
-      "AutoVehicle",
-      "AutoInsured.InsuredUID",
-      "AutoVehicle.InsuredUID",
-    )
+    .leftJoin("AutoDriver", "AutoInsured.InsuredUID", "AutoDriver.InsuredUID")
+    .leftJoin("AutoVehicle", "AutoInsured.InsuredUID", "AutoVehicle.InsuredUID")
     .innerJoin(
       "AutoWebQuote",
       "AutoInsured.InsuredUID",
