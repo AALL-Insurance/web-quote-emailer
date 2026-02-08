@@ -62,7 +62,7 @@ export const handleRunCommand: HandleRunCommand = async (
       }
       return (
         quote.AutoWebQuote.WebProgress !== "display-quote" &&
-        quote.AutoWebQuote.wasUserQuoteFinishedEmailSent !== true
+        !quote.AutoWebQuote.wasUserQuoteFinishedEmailSent
       );
     });
   }
