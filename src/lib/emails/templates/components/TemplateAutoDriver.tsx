@@ -18,7 +18,7 @@ export const TemplateAutoDriver = ({ AutoDriver }: TemplateAutoDriverProps) => {
         <thead>
           <tr>
             <th style={headerCell("#619f42")}>Name</th>
-            <th style={headerCell("#619f42")}>DOB</th>
+            <th style={headerCell("#619f42")}>Date of Birth</th>
             <th style={headerCell("#619f42")}>Gender</th>
             <th style={headerCell("#619f42")}>Relationship</th>
             <th style={headerCell("#619f42")}>Marital</th>
@@ -34,7 +34,11 @@ export const TemplateAutoDriver = ({ AutoDriver }: TemplateAutoDriverProps) => {
               <td style={valueCell}>
                 {driver.DriverFirstName} {driver.DriverLastName}
               </td>
-              <td style={valueCell}>{driver.DriverDOB}</td>
+              <td style={valueCell}>
+                {driver.DriverDOB
+                  ? new Date(driver.DriverDOB).toLocaleDateString()
+                  : "N/A"}
+              </td>
               <td style={valueCell}>{driver.Gender}</td>
               <td style={valueCell}>{driver.Relationship}</td>
               <td style={valueCell}>{driver.MaritalStatus}</td>
