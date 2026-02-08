@@ -9,7 +9,7 @@ const AgentAbandonedQuoteEmail = (
 ) => (
   <AgentEmailTemplate
     title="Quote Abandoned"
-    description={`The client started the quote 30 minutes ago and has not completed it, therefore it is assumed they have abandoned the quote process.`}
+    description={`The client started the quote 30 minutes ago and has not completed it, therefore it is assumed they have abandoned the quote process. <b>Review Quote ${webQuote.QuoteNumber}</b>, verify accuracy and missing discounts before contacting the customer.`}
     webQuote={webQuote}
     autoWebQuoteRate={autoWebQuoteRate}
   />
