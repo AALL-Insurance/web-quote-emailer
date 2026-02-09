@@ -1,27 +1,19 @@
-import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Section,
-  Text,
-} from "@react-email/components";
-import React from "react";
+import { Body, Container, Head, Html, Text } from "@react-email/components";
+import type React from "react";
 import type { WebQuote } from "../../queries.js";
 import type { AutoWebQuoteRates } from "../../types/database.js";
-import { TemplateContactInformation } from "./components/TemplateContactInformation.js";
-import { TemplateHeader } from "./components/TemplateHeader.js";
-import { fontFamily } from "./inline-styles.js";
-import { TemplateGeneralInformation } from "./components/TemplateGeneralInformation.js";
-import { TemplateRatesTable } from "./components/TemplateRatesTable.js";
-import { TemplateGarageAddress } from "./components/TemplateGarageAddress.js";
-import { TemplatePreviousAddress } from "./components/TemplatePreviousAddress.js";
 import { TemplateAutoDriver } from "./components/TemplateAutoDriver.js";
-import { TemplateViolations } from "./components/TemplateViolations.js";
-import { TemplateVehicles } from "./components/TemplateVehicles.js";
+import { TemplateContactInformation } from "./components/TemplateContactInformation.js";
 import { TemplateCoverages } from "./components/TemplateCoverages.js";
+import { TemplateGarageAddress } from "./components/TemplateGarageAddress.js";
+import { TemplateGeneralInformation } from "./components/TemplateGeneralInformation.js";
+import { TemplateHeader } from "./components/TemplateHeader.js";
+import { TemplatePreviousAddress } from "./components/TemplatePreviousAddress.js";
 import { TemplatePriorInsuranceHistory } from "./components/TemplatePriorInsuranceHistory.js";
+import { TemplateRatesTable } from "./components/TemplateRatesTable.js";
+import { TemplateVehicles } from "./components/TemplateVehicles.js";
+import { TemplateViolations } from "./components/TemplateViolations.js";
+import { fontFamily } from "./inline-styles.js";
 
 type AutoQuoteEmailProps = {
   webQuote: WebQuote;
