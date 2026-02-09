@@ -10,22 +10,10 @@ export const getWebQuotes = async (olderThan: number = 30) => {
     .toDate();
   const results = await db
     .selectFrom("AutoInsured")
-    .leftJoin("AutoDriver", "AutoInsured.InsuredUID", "AutoDriver.InsuredUID")
-    .leftJoin("AutoVehicle", "AutoInsured.InsuredUID", "AutoVehicle.InsuredUID")
     .innerJoin(
       "AutoWebQuote",
       "AutoInsured.InsuredUID",
       "AutoWebQuote.InsuredUID",
-    )
-    .leftJoin(
-      "AutoViolation",
-      "AutoInsured.InsuredUID",
-      "AutoViolation.InsuredUID",
-    )
-    .leftJoin(
-      "AutoInsuredPriorPolicy",
-      "AutoInsured.InsuredUID",
-      "AutoInsuredPriorPolicy.InsuredUID",
     )
     .where("AutoInsured.LastSavedDate", "<", dateTimeLimit)
     .where("AutoInsured.LeadSource", "like", "Web Quotes")
