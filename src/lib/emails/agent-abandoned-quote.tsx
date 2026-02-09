@@ -1,4 +1,4 @@
-import { render, toPlainText } from "@react-email/components";
+import { render, Text, toPlainText } from "@react-email/components";
 import type { WebQuote } from "../queries.js";
 import type { AutoWebQuoteRates } from "../types/database.js";
 import AgentEmailTemplate from "./templates/AgentEmailTemplate.js";
@@ -9,7 +9,16 @@ const AgentAbandonedQuoteEmail = (
 ) => (
   <AgentEmailTemplate
     title="Quote Abandoned"
-    description={`The client started the quote 30 minutes ago and has not completed it, therefore it is assumed they have abandoned the quote process.${webQuote.AutoWebQuote && ` Specifically, at the ${webQuote.AutoWebQuote.WebProgress} step.`} <b>Review Quote ${webQuote.QuoteNumber}</b>, verify accuracy and missing discounts before contacting the customer.`}
+    description={
+      <Text>
+        The client started the quote 30 minutes ago and has not completed it,
+        therefore it is assumed they have abandoned the quote process.
+        {webQuote.AutoWebQuote &&
+          ` Specifically, at the ${webQuote.AutoWebQuote.WebProgress} step.`}{" "}
+        <b>Review Quote ${webQuote.QuoteNumber}</b>, verify accuracy and missing
+        discounts before contacting the customer.
+      </Text>
+    }
     webQuote={webQuote}
     autoWebQuoteRate={autoWebQuoteRate}
   />
