@@ -15,7 +15,7 @@ const AgentAbandonedQuoteEmail = (
         therefore it is assumed they have abandoned the quote process.
         {webQuote.AutoWebQuote &&
           ` Specifically, at the ${webQuote.AutoWebQuote.WebProgress} step.`}{" "}
-        <b>Review Quote ${webQuote.QuoteNumber}</b>, verify accuracy and missing
+        <b>Review Quote {webQuote.QuoteNumber}</b>, verify accuracy and missing
         discounts before contacting the customer.
       </Text>
     }
